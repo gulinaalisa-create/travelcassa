@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ТревелКасса</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg: #0e0f14;
+  --surface: #16181f;
+  --card: #1d2030;
+  --border: #2a2d3e;
+  --accent: #f0c060;
+  --accent2: #7c6af7;
+  --red: #f06070;
+  --green: #50d0a0;
+  --text: #e8eaf2;
+  --muted: #7a7f9a;
+  --radius: 16px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 24px 16px 60px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.6rem;
+  font-weight: 900;
+  background: linear-gradient(120deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+header p { color: var(--muted); font-size: 0.95rem; margin-top: 6px; font-weight: 300; }
+
+.container { max-width: 960px; margin: 0 auto; }
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+@media(max-width:700px) { .grid-2 { grid-template-columns: 1fr; } }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+.card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+  color: var(--accent);
+}
+
+label {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 6px;
+  margin-top: 14px;
+}
+input, select {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 14px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+}
+input:focus, select:focus { border-color: var(--accent2); }
+select option { background: var(--card); }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent2), #9b8af8);
+  color: #fff;
+  width: 100%;
+  justify-content: center;
+  margin-top: 16px;
+}
+.btn-accent {
+  background: linear-gradient(135deg, var(--accent), #e8a830);
+  color: #1a1200;
+  width: 100%;
+  justify-content: center;
+  margin-top: 16px;
+}
+.btn-sm {
+  padding: 5px 12px;
+  font-size: 0.8rem;
+  color: var(--red);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+}
+.btn-reset {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 8px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  display: block;
+  margin: 12px auto 0;
+  text-decoration: none;
+}
+
+/* Участники */
+.chip-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; min-height: 36px; }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  padding: 5px 8px 5px 14px;
+  font-size: 0.85rem;
+}
+.chip a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0 4px;
+}
+.chip a:hover { color: var(--red); }
+
+.split-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.split-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+.split-label input { width: 15px; height: 15px; accent-color: var(--accent2); }
+
+/* Траты */
+.expense-list { display: flex; flex-direction: column; gap: 10px; }
+.expense-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+.expense-desc { font-weight: 600; font-size: 0.95rem; }
+.expense-detail { font-size: 0.78rem; color: var(--muted); margin-top: 3px; }
+.expense-amount { font-size: 1.05rem; font-weight: 700; color: var(--accent); }
+.expense-orig { font-size: 0.72rem; color: var(--muted); text-align: right; }
+
+/* Итоги */
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  color: var(--accent);
+  margin: 28px 0 16px;
+  font-weight: 700;
+}
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.stat-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px;
+  text-align: center;
+}
+.stat-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; }
+.stat-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.7rem;
+  font-weight: 700;
+  margin-top: 4px;
+  color: var(--accent);
+}
+
+table { width: 100%; border-collapse: collapse; }
+th {
+  text-align: left;
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 0 12px 10px;
+}
+td { padding: 10px 12px; font-size: 0.9rem; border-top: 1px solid var(--border); }
+.pos { color: var(--green); font-weight: 600; }
+.neg { color: var(--red); font-weight: 600; }
+.debt-amt { color: var(--red); font-weight: 700; }
+.muted { color: var(--muted); }
+
+.empty { color: var(--muted); font-size: 0.88rem; padding: 16px 0; text-align: center; }
+.currency-badge {
+  display: inline-block;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  color: var(--accent2);
+  font-weight: 600;
+  margin-left: 6px;
+}
+.amount-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="logo">✈ ТревелКасса</div>
+  <p>Совместный бюджет путешествия — честно и прозрачно</p>
+</header>
+
+<div class="grid-2">
+
+  <div class="card">
+    <div class="card-title">👥 Участники</div>
+
+    <form method="POST" action="/add_participant">
+      <label>Имя участника</label>
+      <div style="display:flex; gap:8px; align-items:flex-end;">
+        <input type="text" name="name" placeholder="Например: Алина" maxlength="20" required>
+        <button type="submit" class="btn btn-primary" style="width:auto; margin-top:0; white-space:nowrap;">+ Добавить</button>
+      </div>
+    </form>
+
+    <label>Участники поездки</label>
+    <div class="chip-list">
+      {% if participants %}
+        {% for p in participants %}
+          <div class="chip">
+            👤 {{ p }}
+            <a href="/remove_participant/{{ p }}" title="Удалить">×</a>
+          </div>
+        {% endfor %}
+      {% else %}
+        <span class="empty" style="padding:0">Пока нет участников</span>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">💸 Добавить трату</div>
+
+    <form method="POST" action="/add_expense">
+      <label>Описание</label>
+      <input type="text" name="desc" placeholder="Например: Ужин в ресторане" required>
+
+      <label>Кто платил</label>
+      <select name="payer" required>
+        {% if participants %}
+          {% for p in participants %}
+            <option value="{{ p }}">{{ p }}</option>
+          {% endfor %}
+        {% else %}
+          <option value="">— сначала добавьте участников —</option>
+        {% endif %}
+      </select>
+
+      <div class="amount-row">
+        <div>
+          <label>Сумма</label>
+          <input type="number" name="amount" placeholder="0.00" min="0.01" step="0.01" required>
+        </div>
+        <div>
+          <label>Валюта</label>
+          <select name="currency">
+            {% for cur in currencies %}
+              <option value="{{ cur }}">{{ cur }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <label>Разделить между</label>
+      <div class="split-grid">
+        {% if participants %}
+          {% for p in participants %}
+            <label class="split-label">
+              <input type="checkbox" name="split_between" value="{{ p }}" checked>
+              {{ p }}
+            </label>
+          {% endfor %}
+        {% else %}
+          <span style="color:var(--muted); font-size:0.85rem;">Сначала добавьте участников</span>
+        {% endif %}
+      </div>
+
+      <button type="submit" class="btn btn-primary">➕ Добавить трату</button>
+    </form>
+  </div>
+</div>
+
+<div class="card" style="margin-top:20px;">
+  <div class="card-title">🧾 Все траты</div>
+
+  {% if expenses %}
+    <div class="expense-list">
+      {% for e in expenses %}
+        <div class="expense-item">
+          <div>
+            <div class="expense-desc">{{ e.desc }}</div>
+            <div class="expense-detail">
+              💳 {{ e.payer }} · разделить: {{ e.split_between | join(', ') }}
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div class="expense-amount">₽{{ "%.2f"|format(e.amount_rub) }}</div>
+            {% if e.currency != 'RUB' %}
+              <div class="expense-orig">{{ e.symbol }}{{ "%.2f"|format(e.amount) }} {{ e.currency }}</div>
+            {% endif %}
+            <a href="/remove_expense/{{ e.id }}" class="btn-sm" style="margin-top:6px; display:inline-block;">✕ удалить</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty">Пока нет трат</div>
+  {% endif %}
+</div>
+
+{% if summary %}
+  <div class="section-title">
+    📊 Итоги поездки
+    <span class="currency-badge">всё в RUB</span>
+  </div>
+
+  <div class="summary-grid">
+    <div class="stat-box">
+      <div class="stat-label">Всего потрачено</div>
+      <div class="stat-value">₽{{ "%.2f"|format(summary.total) }}</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">Количество трат</div>
+      <div class="stat-value">{{ summary.count }}</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">Участников</div>
+      <div class="stat-value">{{ participants|length }}</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">Переводов нужно</div>
+      <div class="stat-value">{{ summary.debts|length }}</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+
+
+    <div class="card">
+      <div class="card-title">⚖️ Баланс участников</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Участник</th>
+            <th>Заплатил</th>
+            <th>Баланс</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in participants %}
+            {% set b = summary.balance[p] %}
+            <tr>
+              <td>👤 {{ p }}</td>
+              <td>₽{{ "%.2f"|format(summary.paid[p]) }}</td>
+              <td class="{{ 'pos' if b >= 0 else 'neg' }}">
+                {{ '+' if b >= 0 else '' }}₽{{ "%.2f"|format(b) }}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+
+    <div class="card">
+      <div class="card-title">💰 Кто кому должен</div>
+      {% if summary.debts %}
+        <table>
+          <thead>
+            <tr>
+              <th>Должник</th>
+              <th></th>
+              <th>Кредитор</th>
+              <th>Сумма</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for d in summary.debts %}
+              <tr>
+                <td>👤 {{ d.from_person }}</td>
+                <td class="muted">→</td>
+                <td>👤 {{ d.to_person }}</td>
+                <td class="debt-amt">₽{{ "%.2f"|format(d.amount) }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <div class="empty">🎉 Все расчёты равные!</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <a href="/reset" class="btn-reset">🗑 Начать заново</a>
+
+{% elif expenses %}
+  <div style="text-align:center; margin-top:24px; color:var(--muted); font-size:0.9rem;">
+    Траты добавлены — итоги отображаются автоматически при наличии участников
+  </div>
+{% endif %}
+
+</div>
+</body>
+</html>
